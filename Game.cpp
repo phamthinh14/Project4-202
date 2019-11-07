@@ -27,7 +27,11 @@ Game::Game(string File_name) {
 }
 
 Game::~Game() {
-
+    for (int i = 0; i < m_myMap.size(); ++i) {
+        delete m_myMap[i];
+    }
+    delete m_myCharacter;
+    delete m_curMonster;
 }
 
 void Game::LoadMap(string FILE_NAME) {

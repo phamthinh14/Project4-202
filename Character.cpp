@@ -1,8 +1,8 @@
+
+#include "Character.h"
 //
 // Created by phamt on 11/4/2019.
 //
-
-#include "Character.h"
 
 Character::Character() {}
 
