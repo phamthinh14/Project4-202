@@ -109,6 +109,8 @@ public:
     // Postconditions: None
     void Stats();
 
+    void Rest();
+
     void SetisMonsterSpawned(bool isMonsterSpawned);
 
     bool GetisMonsterSpawned();
@@ -117,6 +119,10 @@ public:
 
     bool GetisCharMoved();
 
+    void SetOriginalHealth(int ogHealth);
+
+    int GetOriginalHealth();
+
 private:
     vector<Room *> m_myMap; // Vector for holding all rooms in game
     Entity *m_myCharacter; // Entity pointer for player (or paladin, rogue or wizard)
@@ -124,6 +130,7 @@ private:
     Entity *m_curMonster; // Current monster loaded for current room
     int m_numRests; // Number of rests for player
     int m_numSpecial; // Number of special attacks for player (refreshed after rests)
+    int m_originalHealth;
     bool m_isMonsterSpawned = false;
     bool m_isCharMoved;
 };
