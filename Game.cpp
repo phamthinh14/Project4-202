@@ -15,15 +15,27 @@ Game::Game() {
 // Postconditions: Uses filesname to LoadMap, calls create character,
 //                 and sets both numRests and m_numSpecial using constants.
 Game::Game(string File_name) {
+    int randNum = rand() % 4;
     LoadMap(File_name);
     CharacterCreation();
     m_numRests = NUM_RESTS;
     m_numSpecial = NUM_SPECIAL;
     m_curRoom = START_ROOM;
     m_myMap[m_curRoom]->PrintRoom();
-//    Stats();
+    if (randNum == 1) {
+        m_curMonster = RandomMonster();
+        cout << m_curMonster->GetName() << " is lurking around the room" << endl;
+        SetisMonsterSpawned(true);
+    }
+    if (!GetisMonsterSpawned()) {
+        cout << "It is peaceful in here" << endl;
+    }
+    SetisCharMoved(false);
     Action();
-
+//    if (GetisMonsterSpawned()) {
+//        delete m_curMonster;
+//        SetisMonsterSpawned(false);
+//    }
 }
 
 Game::~Game() {
@@ -31,7 +43,9 @@ Game::~Game() {
         delete m_myMap[i];
     }
     delete m_myCharacter;
-    delete m_curMonster;
+    if (GetisMonsterSpawned()) {
+        delete m_curMonster;
+    }
 }
 
 void Game::LoadMap(string FILE_NAME) {
@@ -309,27 +323,29 @@ void Game::Move() {
     int tempNum;
     int randNum = rand() % 2;
 //    cout << "The size: " << m_myMap.size() << endl;
-
-    cout << "Which direction? (N W E S)" << endl;
-    cin >> option;
-    tempNum = m_myMap[m_curRoom]->CheckDirection(option);
-    if (tempNum != -1) {
-        m_curRoom = tempNum;
-        cout << m_curRoom << endl;
-        m_myMap[m_curRoom]->PrintRoom();
-        SetisCharMoved(true);
-    }
-    if (GetisMonsterSpawned() && GetisCharMoved()) {
-        delete m_curMonster;
-        SetisMonsterSpawned(false);
-    }
-    if (randNum == 1) {
-        m_curMonster = RandomMonster();
-        cout << m_curMonster->GetName() << " is lurking around the room" << endl;
-        SetisMonsterSpawned(true);
-    } else {
-        cout << "It is peaceful in here" << endl;
-    }
+    do {
+        cout << "Which direction? (N W E S)" << endl;
+        cin >> option;
+        tempNum = m_myMap[m_curRoom]->CheckDirection(option);
+        if (tempNum != -1) {
+            m_curRoom = tempNum;
+            cout << m_curRoom << endl;
+            m_myMap[m_curRoom]->PrintRoom();
+            SetisCharMoved(true);
+            if (GetisMonsterSpawned() && GetisCharMoved()) {
+                delete m_curMonster;
+                SetisMonsterSpawned(false);
+            }
+            if (randNum == 1) {
+                m_curMonster = RandomMonster();
+                cout << m_curMonster->GetName() << " is lurking around the room" << endl;
+                SetisMonsterSpawned(true);
+            }
+            if (!GetisMonsterSpawned()) {
+                cout << "It is peaceful in here" << endl;
+            }
+        }
+    } while (tempNum == -1);
 
 
 }
